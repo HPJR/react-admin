@@ -1,0 +1,58 @@
+@color2:rgb(241, 40, 4);
+.nameInput{
+    width: 300px;
+}
+.reseachBtn{
+    margin: 0 5px;
+    font-size: 12px;
+}
+.searchForm{
+    padding: 25px;
+    border-bottom: 1px solid #e8e6e6;
+    >*{
+        font-size: 12px !important;
+    }
+}
+.formCard{
+    :global{
+        .ant-card-body{
+            padding: 0;
+        }
+       
+    }
+    
+}
+.tableWrap{
+    padding: 25px;
+    :global{
+        .ant-table-thead > tr > th .ant-table-header-column{
+            font-weight: bold;
+        }
+        .ant-table-bordered .ant-table-thead > tr > th, .ant-table-bordered .ant-table-tbody > tr > td{
+            font-size: 13px;
+        }
+    }
+}
+.editTableIcon{
+    display: flex;
+    display:-webkit-flex;
+    justify-content: space-between;
+    i{
+        color:@primary-color;
+    }
+    span{
+        color: #929292;
+    }
+    >div{
+        cursor: pointer;
+        &:hover{
+            span{
+                color: @color2;
+            }
+        }
+    }
+}
+.sameTab{
+    margin-top: 30px;
+    font-size: 12px;
+}

@@ -1,0 +1,49 @@
+.flexWrap {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-between;
+}
+.control_article {
+  margin-bottom: 30px;
+  ul {
+    .flexWrap;
+    padding-left: 0;
+    li {
+      background: #fff;
+      padding: 20px 20px 10px 20px;
+      width: 19%;
+      > * {
+        display: block;
+      }
+      p.control_article_t {
+        line-height: 22px;
+        .flexWrap;
+        b {
+          color: rgba(0, 0, 0, 0.45);
+          font-size: 14px;
+          font-weight: 500;
+        }
+      }
+      & > span.control_article_num {
+        height: 38px;
+        margin-top: 4px;
+        margin-bottom: 0;
+        overflow: hidden;
+        color: rgba(0, 0, 0, 0.85);
+        font-size: 30px;
+        line-height: 38px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
+      }
+      & > small.control_article_tips {
+        margin-top: 8px;
+        padding-top: 9px;
+        border-top: 1px solid #e8e8e8;
+      }
+    }
+  }
+}
+.cardWrap {
+  width: 49%;
+}
