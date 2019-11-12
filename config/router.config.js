@@ -43,6 +43,15 @@ export default [
                 icon: 'highlight',
                 path: '/content/single',
                 component: './Content/Single',
+                routes:[
+                   //编辑/新增
+                    {
+                      path: '/content/single/addedit',
+                      name: '单页管理11',
+                      hideInMenu:true,
+                      component: './Content/Single/Addedit',
+                    }
+                ]
               },
               // 文章管理
               {
@@ -59,6 +68,14 @@ export default [
                 component: './Content/Products',
               },
             ],
+          },
+          //编辑/新增
+          {
+            path: '/addedit',
+            name: '内容编辑',
+            hideInMenu:true,
+            icon: 'table',
+            component: './Addedit',
           },
           //人才招聘
           {

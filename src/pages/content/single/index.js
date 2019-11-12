@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import { Card, Select ,Form, Icon, Input, Button,Table,Badge,InputNumber  } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import router from 'umi/router';
 import common from './../../all.less';
 const { Option } = Select;
 
@@ -347,7 +348,8 @@ export default class Single extends Component{
             {/* 编辑 */}
             <div className={common.tableWrap}>
               <div className={common.editBtn}>
-                  <Button className={common.reseachBtn} type="primary" icon="plus">新增单页</Button>
+                  <Button className={common.reseachBtn} type="primary" icon="plus" 
+                    onClick={()=>{router.push('/content/single/addedit')}}>新增单页</Button>
                   <Button className={common.reseachBtn} type="" icon="delete" onClick={this.handleEdit.bind(this,this.state.selectIdArr,'del')}>删除选中单页</Button>
               </div>
               
