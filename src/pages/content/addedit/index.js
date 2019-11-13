@@ -1,48 +1,35 @@
-import React, { Component } from 'react';
-require('../../utils/ueditor/ueditor.config.js');
-require('../../utils/ueditor/ueditor.all.min.js');
-require('../../utils/ueditor/lang/zh-cn/zh-cn.js');
+import React,{Component} from 'react';
+import { Card, Button, Alert, Icon } from 'antd';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import Ueditor from '../../../components/UEditor';
 
-class Ueditor extends Component {
+export default class Addedit extends Component{
   constructor(props) {
-    super(props);
-    console.log('props');
-    console.log(props);
+    super(props)
     this.state = {
-      id: props.id,
-      height: props.height,
-      name: props.name,
-      value: props.content,
-    };
-    console.log('state');
-    console.log(this.state);
+      initData: ''
+    }
   }
-  componentDidMount() {
-    this.initEditor();
+
+  // 富文本编辑器 保存
+  saveEditor = () => {
+    console.log(this.refs.ueditor.getUEContent())
   }
-  componentWillUnmount() {
-    // 组件卸载后，清除放入库的id
-    UE.delEditor(this.props.id);
-  }
-  initEditor() {
-    const id = this.state.id;
-    const ueEditor = UE.getEditor(this.state.id, {
-      initialFrameHeight: 500,
-    });
-    const self = this;
-    ueEditor.ready(ueditor => {
-      if (!ueditor) {
-        UE.delEditor(id);
-        self.initEditor();
-      }
-    });
-  }
-  render() {
-    return (
-      <script id={this.state.id} name={this.state.name} type="text/plain">
-        {props.content}
-      </script>
-    );
+
+
+  render(){
+    return(
+      <PageHeaderWrapper>
+        <Card>
+          <Ueditor id={'myeditor'}/>
+          {/* 使用UEditor 组件 */}
+          {/* <Ueditor value={formData.content} id="content" height="200" disabled={!this.props.canEdit}/>  */}
+          {/* <UEditor ref="ueditor" initData={this.state.initData} /> */}
+          <Button type="primary" onClick={this.saveEditor}>
+            保存
+          </Button>
+        </Card>
+      </PageHeaderWrapper>
+    )
   }
 }
-export default Ueditor;
