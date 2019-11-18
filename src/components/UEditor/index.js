@@ -6,9 +6,12 @@ export default class Ueditor extends React.Component {
     this.state = {
       id: this.props.id ? this.props.id : null,
       ueditor: null,
+      propsHeight:this.props.propsHeight!==undefined?this.props.propsHeight:300,
+      propsWidth:this.props.propsWidth!==undefined?this.props.propsWidth:'100%'
     };
   }
   componentDidMount() {
+    const {propsHeight,propsWidth} = this.props;
     let UE = window.UE;
     let { id } = this.state;
     if (id) {
@@ -18,8 +21,13 @@ export default class Ueditor extends React.Component {
         UE.delEditor(id);
       } catch (e) {}
       let ueditor = UE.getEditor(id, {
-        autoHeightEnabled: true,
-        autoFloatEnabled: true,
+        toolbars: [["fullscreen","source","undo","redo","cleardoc","removeformat","formatmatch","pasteplain","drafts","autotypeset","template","simpleupload","insertimage","insertvideo","attachment","link","|","inserttable","mergeright","mergedown","splittorows","splittocols","mergecells","|","preview","searchreplace","help","|"],["bold","italic","underline","fontfamily","fontsize","forecolor","backcolor","insertunorderedlist","insertorderedlist","indent","paragraph","|","justifyleft","justifycenter","justifyright","justifyjustify","lineheight"]],
+		    autoHeightEnabled: false,
+		    autoFloatEnabled: false,
+		    imageScaleEnabled:false,
+		    wordCount:false,
+        initialFrameHeight: propsHeight,
+        initialFrameWidth:'100%',//宽度100%
       });
       this.setState({ ueditor });
     }
