@@ -1,17 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {
-  Card,
-  Button,
-  Form,
-  DatePicker,
-  TimePicker,
-  TreeSelect,
-  Upload,
-  Icon,
-  Modal,
-  Input,
-} from 'antd';
+import { Card, Button, Form, Icon } from 'antd';
 import InputTwo from './InputTwo';
 import styles from './index.less';
 
@@ -21,18 +9,6 @@ let id = 0;
 class InputArray extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      inpuArr: [
-        {
-          name: '规格一',
-          val: '15公分',
-        },
-        {
-          name: '规格二',
-          val: '4kg',
-        },
-      ],
-    };
   }
 
   add = () => {
@@ -47,6 +23,7 @@ class InputArray extends Component {
   remove = k => {
     const { form } = this.props;
     const keys = form.getFieldValue('keys');
+    console.log(keys);
     if (keys.length === 1) {
       return;
     }
@@ -55,32 +32,34 @@ class InputArray extends Component {
     });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
+  handleChange = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const { keys, names } = values;
-        console.log('Received values of form: ', values);
-        console.log(
-          'Merged values:',
-          keys.map(key => names[key]),
-        );
+        const { names } = values;
+        const { onChange } = this.props;
+        if (onChange) {
+          onChange({
+            ...names,
+          });
+        }
       }
     });
   };
 
   render() {
-    const { inpuArr } = this.state;
+    // console.log(this.props.value);
     const { getFieldDecorator, getFieldValue } = this.props.form;
-    getFieldDecorator('keys', { initialValue: [] });
+    getFieldDecorator('keys', { initialValue: this.props.value ? this.props.value : [] });
     const keys = getFieldValue('keys');
 
-    const formItems = keys.map((k, item) => (
+    const formItems = keys.map((k, index) => (
       <div>
         <Form.Item required={false} key={k}>
           {getFieldDecorator(`names[${k}]`, {
             validateTrigger: ['onChange', 'onBlur'],
-          })(<InputTwo />)}
+          })(
+            <InputTwo onChange={this.handleChange} key={index} values={this.props.value[index]} />,
+          )}
           {keys.length > 1 ? (
             <Icon
               className="dynamic-delete-button"
@@ -95,20 +74,13 @@ class InputArray extends Component {
     return (
       <div className="input-array-component">
         <div className={styles.normWrap}>
-          <Form onSubmit={this.handleSubmit}>
-            {formItems}
-            <Form.Item>
-              <Button type="primary" onClick={this.add} className={styles.addNormBtn}>
-                <Icon type="plus" />
-                新增规格
-              </Button>
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-          </Form>
+          {formItems}
+          <Form.Item>
+            <Button type="primary" onClick={this.add} className={styles.addNormBtn}>
+              <Icon type="plus" />
+              新增规格
+            </Button>
+          </Form.Item>
         </div>
       </div>
     );

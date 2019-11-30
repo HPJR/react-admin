@@ -1,8 +1,9 @@
-import { Badge, Icon, Spin, Table } from 'antd';
 import React, { Component } from 'react';
-import common from './../../all.less';
+import { Form, Input, Table, InputNumber, Icon, Badge } from 'antd';
+import common from './../../pages/all.less';
 
-export default class BasicTable extends Component() {
+@Form.create()
+class BasicTable extends Component {
   static defaultProps = {
     loading: false,
   };
@@ -79,7 +80,7 @@ export default class BasicTable extends Component() {
       },
       {
         title: '名称',
-        width: 250,
+        // width: 250,
         render: record => {
           return (
             <div>
@@ -246,10 +247,12 @@ export default class BasicTable extends Component() {
         rowSelection={rowSelection}
         bordered
         columns={columns}
-        dataSource={data}
+        dataSource={this.props.data}
         size="small"
         pagination={pageData}
       />
     );
   }
 }
+
+export default BasicTable;

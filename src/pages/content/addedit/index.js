@@ -34,33 +34,13 @@ export default class Addedit extends Component {
       //上传
       previewVisible: false,
       previewImage: '',
-      fileList: [
-        {
-          uid: '-1',
-          name: 'image.png',
-          status: 'done',
-          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-          uid: '-5',
-          name: 'image.png',
-          status: 'error',
-        },
-      ],
+      fileList: [],
     };
   }
 
   componentDidMount() {}
 
-  // 富文本编辑器 保存
-  hanldeGetContent = value => {
-    var content = UE.getEditor('content').getContent();
-    console.log(content);
-  };
-
-  //分类选择
-
-  //图片上传
+  /* 图片上传开始 */
   getBase64 = file => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -84,14 +64,32 @@ export default class Addedit extends Component {
       previewVisible: true,
     });
   };
-  //
+  //设置上传后图片路径数组
   handleChange = ({ fileList }) => {
+    this.props.form.setFieldsValue({
+      fileList: fileList,
+    });
     this.setState({ fileList });
   };
 
-  //获取时间
-  handleGetTime = value => {
-    console.log('onOk: ', value);
+  /* 图片上传结束 */
+
+  //保存
+  hanldeGetContent = value => {
+    let content = UE.getEditor('content').getContent();
+    this.props.form.validateFields((err, values) => {
+      values.content = content;
+      values.time = moment(values.time).format('YYYY/MM/DD HH:mm:ss');
+      if (!err) {
+        console.log(values);
+      }
+    });
+  };
+
+  //重置
+  handleReset = () => {
+    UE.getEditor('content').setContent('');
+    this.props.form.resetFields();
   };
 
   render() {
@@ -122,24 +120,19 @@ export default class Addedit extends Component {
         xl: { span: 8 },
       },
     };
-    //验证规则
-    const config = {
-      rules: [{ type: 'array', required: true, message: '请选择分类' }],
-    };
 
     return (
       <PageHeaderWrapper title={title.article.add}>
         <Card className={styles.editWrap}>
           <Form {...formItemLayout}>
             <Form.Item label="产品类别">
-              {getFieldDecorator(
-                'typeValue',
-                config,
-              )(
+              {getFieldDecorator('typeValue', {
+                rules: [{ type: 'array', required: true, message: '请选择分类' }],
+                initialValue: [],
+              })(
                 <TreeSelect
                   showSearch
                   style={{ width: '100%' }}
-                  value={this.state.typeArrValue}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   placeholder="分类"
                   allowClear
@@ -163,10 +156,13 @@ export default class Addedit extends Component {
             <Form.Item label="产品名称">
               {getFieldDecorator('name', {
                 rules: [{ required: true, message: '请填写名称' }],
+                initialValue: '',
               })(<Input placeholder="产品名称" />)}
             </Form.Item>
-            <Form.Item label="产品图片" wrapperCol={{ span: '21' }}>
-              {getFieldDecorator('imgArr')(
+            <Form.Item label="产品图片">
+              {getFieldDecorator('fileList', {
+                initialValue: [],
+              })(
                 <div>
                   <Upload
                     action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -184,23 +180,9 @@ export default class Addedit extends Component {
               )}
             </Form.Item>
             <Form.Item label="规格">
-              {getFieldDecorator('norm')(
-                <InputArray />,
-                // <div className={styles.normWrap}>
-                //   <div className={styles.normList}>
-                //     <Input placeholder='规格名称：例如尺寸，重量等' className={styles.normInput} />
-                //     <Input placeholder='规格值' className={styles.normInput} />
-                //     <Icon
-                //       className="dynamic-delete-button"
-                //       type="minus-circle-o"
-                //     // onClick={() => this.remove(k)}
-                //     />
-                //   </div>
-                //   <Button type='primary' className={styles.addNormBtn}>
-                //     <Icon type="plus" />
-                //     新增规格</Button>
-                // </div>
-              )}
+              {getFieldDecorator('norm', {
+                initialValue: [],
+              })(<InputArray />)}
             </Form.Item>
             <Form.Item label="编辑时间">
               {getFieldDecorator('time', {
@@ -210,15 +192,18 @@ export default class Addedit extends Component {
                   showTime
                   placeholder="选择时间"
                   format="YYYY/MM/DD HH:mm:ss"
-                  onOk={this.handleGetTime}
                 ></DatePicker>,
               )}
             </Form.Item>
             <Form.Item label="关键词">
-              {getFieldDecorator('keywords')(<Input placeholder="请填写你的关键词" />)}
+              {getFieldDecorator('keywords', {
+                initialValue: '',
+              })(<Input placeholder="请填写你的关键词" />)}
             </Form.Item>
             <Form.Item label="描述">
-              {getFieldDecorator('description')(<TextArea rows={4} placeholder="请填写你的描述" />)}
+              {getFieldDecorator('description', {
+                initialValue: '',
+              })(<TextArea rows={4} placeholder="请填写你的描述" />)}
             </Form.Item>
             <div className={styles.UEditorFormWrap}>
               <div className={styles.UEditorTitle}>产品内容：</div>
@@ -228,10 +213,8 @@ export default class Addedit extends Component {
             </div>
             <Form.Item
               wrapperCol={{
-                wrapperCol: {
-                  xs: { span: 24 },
-                  sm: { span: 24 },
-                },
+                xs: { span: 24 },
+                sm: { span: 24 },
               }}
             >
               <div className={styles.btnSub}>
@@ -245,7 +228,7 @@ export default class Addedit extends Component {
                 </Button>
                 <Button
                   type="default"
-                  onClick={this.hanldeGetContent}
+                  onClick={this.handleReset}
                   className={styles.btnSubList}
                   htmlType="submit"
                 >

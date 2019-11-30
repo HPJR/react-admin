@@ -1,16 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Card,
-  Button,
-  Form,
-  DatePicker,
-  TimePicker,
-  TreeSelect,
-  Upload,
-  Icon,
-  Modal,
-  Input,
-} from 'antd';
+import { Form, Input } from 'antd';
 import styles from './index.less';
 
 @Form.create()
@@ -60,22 +49,21 @@ class InputTwo extends Component {
   };
 
   render() {
-    const { name, number } = this.state;
     return (
-      <span>
+      <div>
         <Input
           placeholder="规格名称：例如尺寸，重量等"
-          value={name}
+          defaultValue={this.props.values ? this.props.values.name : ''}
           onChange={this.handleNameChange}
           className={styles.normInput}
         />
         <Input
           placeholder="规格值"
-          value={number}
+          defaultValue={this.props.values ? this.props.values.name : ''}
           onChange={this.handleNumberChange}
           className={styles.normInput}
         />
-      </span>
+      </div>
     );
   }
 }
