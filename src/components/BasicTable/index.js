@@ -232,9 +232,10 @@ class BasicTable extends Component {
     //表格筛选
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
-        this.setState({
-          selectIdArr: selectedRowKeys,
-        });
+        this.props.handlePropsRowKeys(selectedRowKeys);
+        // this.setState({
+        //   selectIdArr: selectedRowKeys,
+        // });
         // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       },
     };

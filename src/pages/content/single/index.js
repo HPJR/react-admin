@@ -67,28 +67,17 @@ export default class Single extends Component {
     }
   };
 
-  //删除/编辑
-  handleEdit = (idArr, type, status, e) => {
-    console.log(type);
-    //多个删除
-    if (!idArr && type === 'del') {
-      console.log(this.state.selectIdArr);
-    }
-    //单个删除
-    else if (idArr && type === 'del') {
-      console.log(idArr);
-    }
-    //隐藏显示
-    else if (type === 'toggle') {
-      console.log(idArr);
-      console.log(status);
-    }
-    //编辑
-    else {
-      console.log(idArr);
-    }
+  //删除选中产品
+  handleEdit = () => {
+    console.log(this.state.selectIdArr);
   };
 
+  //获取表格选中的
+  getChildRowKeys = val => {
+    this.setState({
+      selectIdArr: val,
+    });
+  };
   render() {
     const data = [
       {
@@ -210,7 +199,7 @@ export default class Single extends Component {
                   删除选中单页
                 </Button>
               </div>
-              <BasicTable data={data} />
+              <BasicTable data={data} handlePropsRowKeys={this.getChildRowKeys.bind(this)} />
             </div>
           </Card>
         </div>

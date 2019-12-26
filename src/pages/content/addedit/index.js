@@ -56,7 +56,7 @@ export default class Addedit extends Component {
   //
   handlePreview = async file => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+      file.preview = await this.getBase64(file.originFileObj);
     }
 
     this.setState({

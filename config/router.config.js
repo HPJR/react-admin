@@ -66,6 +66,14 @@ export default [
                 path: '/content/products',
                 component: './Content/Products',
               },
+              // 分类管理
+              {
+                name: '分类管理',
+                icon: 'highlight',
+                path: '/content/products/type',
+                component: './Content/Products/Type',
+                hideInMenu: true,
+              },
             ],
           },
           //人才招聘

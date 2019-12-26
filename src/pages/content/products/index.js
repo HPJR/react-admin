@@ -1,10 +1,25 @@
 import React, { Component } from 'react';
-import { Card, Select, Form, Icon, Input, Button, Table, Badge, InputNumber } from 'antd';
+import {
+  Card,
+  Select,
+  Form,
+  Icon,
+  Input,
+  Button,
+  Table,
+  Badge,
+  InputNumber,
+  TreeSelect,
+  DatePicker,
+} from 'antd';
+import moment from 'moment';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import router from 'umi/router';
 import common from './../../all.less';
 const { Option } = Select;
 import BasicTable from '../../../components/BasicTable';
+const { TreeNode } = TreeSelect;
+const { RangePicker } = DatePicker;
 
 @Form.create()
 export default class Single extends Component {
@@ -25,9 +40,12 @@ export default class Single extends Component {
 
   //提交搜索
   handleSubmit = e => {
+    const { startTime, endTime } = this.state;
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        values.startTime = startTime;
+        values.endTime = endTime;
         console.log(values);
       }
     });
@@ -67,26 +85,25 @@ export default class Single extends Component {
     }
   };
 
-  //删除/编辑
-  handleEdit = (idArr, type, status, e) => {
-    console.log(type);
-    //多个删除
-    if (!idArr && type === 'del') {
-      console.log(this.state.selectIdArr);
-    }
-    //单个删除
-    else if (idArr && type === 'del') {
-      console.log(idArr);
-    }
-    //隐藏显示
-    else if (type === 'toggle') {
-      console.log(idArr);
-      console.log(status);
-    }
-    //编辑
-    else {
-      console.log(idArr);
-    }
+  //删除选中产品
+  handleEdit = () => {
+    console.log(this.state.selectIdArr);
+  };
+
+  //获取表格选中的
+  getChildRowKeys = val => {
+    this.setState({
+      selectIdArr: val,
+    });
+  };
+
+  //日期筛选
+  pickerOnChange = (dates, dateStrings) => {
+    const [startTime, endTime] = dateStrings;
+    this.setState({
+      startTime: startTime,
+      endTime: endTime,
+    });
   };
 
   render() {
@@ -158,21 +175,60 @@ export default class Single extends Component {
           <Card>
             {/* 表单搜索 */}
             <Form layout="inline" onSubmit={this.handleSubmit} className={common.searchForm}>
-              <Form.Item>
-                {getFieldDecorator('username', {
+              <Form.Item label="分类">
+                {getFieldDecorator('typeValue', {
+                  // rules: [{ type: 'array', required: true, message: '请选择分类' }],
+                  initialValue: [],
+                })(
+                  <TreeSelect
+                    showSearch
+                    style={{ width: 150 }}
+                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                    placeholder="分类"
+                    allowClear
+                    treeDefaultExpandAll
+                  >
+                    <TreeNode value="parent 1-0" title="parent 1-0" key="0-1-1">
+                      <TreeNode value="leaf1" title="my leaf" key="random" />
+                      <TreeNode value="leaf2" title="your leaf" key="random1" />
+                    </TreeNode>
+                    <TreeNode value="parent 1-1" title="parent 1-1" key="random2">
+                      <TreeNode
+                        value="sss"
+                        title={<b style={{ color: '#08c' }}>sss</b>}
+                        key="random3"
+                      />
+                    </TreeNode>
+                  </TreeSelect>,
+                )}
+              </Form.Item>
+              <Form.Item label="关键字">
+                {getFieldDecorator('keywords', {
                   rules: [
                     {
                       equired: true,
-                      message: '请输入单页名称',
+                      message: '请输入关键字...',
                     },
                   ],
-                })(<Input allowClear className={common.nameInput} placeholder="请输入单页名称" />)}
+                })(<Input allowClear style={{ width: 150 }} placeholder="请输入关键字..." />)}
               </Form.Item>
-              <Form.Item>
+              <Form.Item label="时间">
+                {getFieldDecorator('time', {
+                  initialValue: '',
+                })(
+                  <RangePicker
+                    showTime={{ format: 'HH:mm' }}
+                    format="YYYY-MM-DD HH:mm"
+                    style={{ width: 200 }}
+                    onChange={this.pickerOnChange}
+                  />,
+                )}
+              </Form.Item>
+              <Form.Item label="状态">
                 {getFieldDecorator('stauts', {
                   initialValue: '',
                 })(
-                  <Select style={{ width: 120 }}>
+                  <Select style={{ width: 80 }}>
                     <Option value="">全部</Option>
                     <Option value={1}>显示</Option>
                     <Option value={0}>隐藏</Option>
@@ -194,12 +250,12 @@ export default class Single extends Component {
                 <Button
                   className={common.reseachBtn}
                   type="primary"
-                  icon="plus"
+                  icon="appstore"
                   onClick={() => {
-                    router.push('/content/single/add');
+                    router.push('/content/products/type');
                   }}
                 >
-                  产品分类
+                  管理分类
                 </Button>
                 <Button
                   className={common.reseachBtn}
@@ -230,7 +286,7 @@ export default class Single extends Component {
                   删除选中产品
                 </Button>
               </div>
-              <BasicTable data={data} />
+              <BasicTable data={data} handlePropsRowKeys={this.getChildRowKeys.bind(this)} />
             </div>
           </Card>
         </div>
