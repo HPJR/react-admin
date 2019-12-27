@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Form, Input, Table, InputNumber, Icon, Badge } from 'antd';
 import common from './../../pages/all.less';
 
-@Form.create()
 class BasicTable extends Component {
   static defaultProps = {
     loading: false,
@@ -11,9 +10,10 @@ class BasicTable extends Component {
     super(props);
     this.state = {
       data: this.props.data ? this.props.data : [],
-      selectIdArr: '',
+      selectedRowKeys: [],
       imgWidth: 40,
     };
+    this.clearRowSelection = this.clearRowSelection.bind(this);
   }
 
   //更改图片尺寸
@@ -65,6 +65,19 @@ class BasicTable extends Component {
     else {
       console.log(idArr);
     }
+  };
+
+  //清除选中
+  clearRowSelection = () => {
+    console.log(123);
+    this.setState({
+      selectedRowKeys: [],
+    });
+  };
+
+  onSelectChange = selectedRowKeys => {
+    this.setState({ selectedRowKeys });
+    this.props.handlePropsRowKeys(selectedRowKeys);
   };
 
   render() {
@@ -230,14 +243,10 @@ class BasicTable extends Component {
     };
 
     //表格筛选
+    const { selectedRowKeys } = this.state;
     const rowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
-        this.props.handlePropsRowKeys(selectedRowKeys);
-        // this.setState({
-        //   selectIdArr: selectedRowKeys,
-        // });
-        // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      },
+      selectedRowKeys,
+      onChange: this.onSelectChange,
     };
 
     const { data } = this.state;

@@ -14,14 +14,12 @@ import {
   Modal,
   message,
 } from 'antd';
-import moment from 'moment';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import router from 'umi/router';
 import common from '../../../all.less';
 const { Option } = Select;
 import BasicTable from '../../../../components/BasicTable';
 const { TreeNode } = TreeSelect;
-const { RangePicker } = DatePicker;
 
 @Form.create()
 export default class Single extends Component {
@@ -36,9 +34,7 @@ export default class Single extends Component {
     };
   }
 
-  componentDidMount() {
-    this.props.form.validateFields();
-  }
+  componentDidMount() {}
 
   //更改标题及排序
   handleChangeTitle = (id, oldVal, type, e) => {
@@ -83,13 +79,29 @@ export default class Single extends Component {
     }
   };
 
+  //确定移动
+  handleFormOk = () => {
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        this.setState({
+          visible: false,
+          selectIdArr: [],
+        });
+        this.props.form.resetFields();
+        //取消选中
+        this.myChild.clearRowSelection();
+        console.log(values);
+      }
+    });
+  };
+
   render() {
     const data = [
       {
         key: 1,
         id: 1,
         users: 'fan',
-        name: '文章一',
+        name: '分类',
         type: '类别一',
         status: 1,
         keywords: 1,
@@ -157,6 +169,8 @@ export default class Single extends Component {
       },
     };
 
+    const that = this;
+
     return (
       <PageHeaderWrapper>
         <div className={common.formCard}>
@@ -191,7 +205,13 @@ export default class Single extends Component {
                   删除选中分类
                 </Button>
               </div>
-              <BasicTable data={data} handlePropsRowKeys={this.getChildRowKeys.bind(this)} />
+              <BasicTable
+                data={data}
+                handlePropsRowKeys={that.getChildRowKeys.bind(this)}
+                ref={ref => {
+                  that.myChild = ref;
+                }}
+              />
             </div>
           </Card>
 
@@ -199,7 +219,7 @@ export default class Single extends Component {
           <Modal
             title="移动"
             visible={this.state.visible}
-            onOk={this.handleOk}
+            onOk={this.handleFormOk}
             onCancel={() => {
               this.setState({ visible: false });
             }}
@@ -207,19 +227,17 @@ export default class Single extends Component {
             <Form className="login-form" {...formItemLayout}>
               <Form.Item label="目标分类">
                 {getFieldDecorator('typeArr', {
-                  rules: [{ required: true, message: 'Please input your username!' }],
+                  rules: [{ required: true, message: '请选择移动的分类' }],
                   initialValue: [],
                 })(
                   <TreeSelect
                     showSearch
                     style={{ width: '100%' }}
-                    value={this.state.value}
                     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                    placeholder="Please select"
+                    placeholder="请选择分类"
                     allowClear
                     multiple
                     treeDefaultExpandAll
-                    onChange={this.onChange}
                   >
                     <TreeNode value="parent 1" title="parent 1" key="0-1">
                       <TreeNode value="parent 1-0" title="parent 1-0" key="0-1-1">
@@ -240,8 +258,8 @@ export default class Single extends Component {
               <Form.Item label="列表ID">
                 {getFieldDecorator('idArr', {
                   rules: [{ required: true, message: '不能为空' }],
-                  initialValue: [],
-                })(<Input placeholder="Password" />)}
+                  initialValue: this.state.selectIdArr.join(),
+                })(<Input placeholder="id" />)}
               </Form.Item>
             </Form>
           </Modal>
