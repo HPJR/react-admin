@@ -17,7 +17,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import router from 'umi/router';
 import common from './../../all.less';
 const { Option } = Select;
-import BasicTable from '../../../components/BasicTable';
+import BasicTable from '@/components/BasicTable';
 const { TreeNode } = TreeSelect;
 const { RangePicker } = DatePicker;
 

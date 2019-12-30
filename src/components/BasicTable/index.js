@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, Table, InputNumber, Icon, Badge } from 'antd';
-import common from './../../pages/all.less';
+import common from '@/pages/all.less';
 
 class BasicTable extends Component {
   static defaultProps = {
@@ -244,12 +244,11 @@ class BasicTable extends Component {
 
     //表格筛选
     const { selectedRowKeys } = this.state;
+
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
-
-    const { data } = this.state;
 
     return (
       <Table

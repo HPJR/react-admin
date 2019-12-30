@@ -25,6 +25,8 @@ const codeMessage = {
  * 异常处理程序
  */
 
+const httpServer = 'https://www.fastmock.site/mock/1d2e16f4b440b50fb790fd03c81c171b/blog'; //
+
 const errorHandler = error => {
   const { response } = error;
 
@@ -49,6 +51,7 @@ const errorHandler = error => {
  */
 
 const request = extend({
+  prefix: httpServer, //全局请求地址
   errorHandler,
   // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie

@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'querystring';
-import { fakeAccountLogin, getFakeCaptcha } from '@/services/login';
+import { fakeAccountLogin } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 const Model = {
@@ -17,10 +17,11 @@ const Model = {
       }); // Login successfully
 
       if (response.status === 'ok') {
+        // 官方
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
-
+        console.log(redirect);
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
 
@@ -38,10 +39,6 @@ const Model = {
 
         yield put(routerRedux.replace(redirect || '/'));
       }
-    },
-
-    *getCaptcha({ payload }, { call }) {
-      yield call(getFakeCaptcha, payload);
     },
 
     *logout(_, { put }) {
