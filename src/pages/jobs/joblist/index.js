@@ -5,14 +5,17 @@ import common from '@/pages/all.less';
 
 import { connect } from 'dva';
 
-@connect(({ jobs }) => ({
+@connect(({ jobs, loading }) => ({
   jobs,
+  loading: loading.models.jobs,
 }))
 export default class JobList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedRowKeys: [],
+      currentPage: 1,
+      pageSize: 10,
     };
   }
 
@@ -20,29 +23,32 @@ export default class JobList extends Component {
     this.getJobsList();
   }
 
-  getJobsList = () => {
-    //获取权益设置
+  getJobsList = params => {
+    const { currentPage, pageSize } = this.state;
+    params
+      ? params
+      : (params = {
+          currentPage,
+          pageSize,
+        });
+    console.log(params);
     const { dispatch } = this.props;
     dispatch({
       type: 'jobs/getSetJobsList',
+      payload: params,
     });
   };
 
   //删除/编辑
-  handleEdit = (idArr, type, status, e) => {
+  handleEdit = (idArr, type, e) => {
     console.log(type);
     //多个删除
     if (!idArr && type === 'del') {
-      console.log(this.state.selectIdArr);
+      console.log(this.state.selectedRowKeys);
     }
     //单个删除
     else if (idArr && type === 'del') {
       console.log(idArr);
-    }
-    //隐藏显示
-    else if (type === 'toggle') {
-      console.log(idArr);
-      console.log(status);
     }
     //编辑
     else {
@@ -52,7 +58,6 @@ export default class JobList extends Component {
 
   //清除选中
   clearRowSelection = () => {
-    console.log(123);
     this.setState({
       selectedRowKeys: [],
     });
@@ -119,28 +124,16 @@ export default class JobList extends Component {
       pageSize: this.state.pageSize,
       total: this.state.total,
       onShowSizeChange: (page, pageSize) => {
-        this.setState(
-          {
-            pageSize: pageSize,
-          },
-          () => {
-            //重新请求
-            const parmars = {
-              current: 1,
-              pageSize: pageSize,
-            };
-          },
-        );
+        this.getJobsList({
+          pageSize: pageSize,
+          currentPage: page,
+        });
       },
       onChange: (page, pageSize) => {
-        this.setState(
-          {
-            current: page,
-          },
-          () => {
-            //重新请求
-          },
-        );
+        this.getJobsList({
+          pageSize: pageSize,
+          currentPage: page,
+        });
       },
     };
 
@@ -162,12 +155,14 @@ export default class JobList extends Component {
               className={common.reseachBtn}
               type=""
               icon="delete"
-              onClick={this.handleEdit.bind(this, this.state.selectIdArr, 'del')}
+              onClick={this.handleEdit.bind(this, this.state.selectedRowKeys, 'del')}
             >
               删除选中文章
             </Button>
           </div>
           <Table
+            loading={this.props.loading}
+            rowKey={record => record.id}
             className={common.sameTab}
             rowSelection={rowSelection}
             bordered
