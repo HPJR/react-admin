@@ -13,3 +13,19 @@ export async function delJobsList(params) {
     body: JSON.stringify(params),
   });
 }
+
+//新增成功 / 编辑成功
+export async function addJobsList(params) {
+  return request('/add', {
+    method: 'POST',
+    body: JSON.stringify(params),
+  });
+}
+
+//查询编辑
+export async function editJobsList(params) {
+  return request('/edit/one', {
+    method: 'POST',
+    body: JSON.stringify(params),
+  });
+}

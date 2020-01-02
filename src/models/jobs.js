@@ -1,9 +1,10 @@
-import { getJobsList, delJobsList } from '../services/jobs';
+import { getJobsList, delJobsList, addJobsList } from '../services/jobs';
 
 export default {
   namespace: 'jobs',
   state: {
     JobsList: [],
+    total: '',
   },
 
   effects: {
@@ -19,6 +20,14 @@ export default {
     //删除招聘
     *getDelJobsList({ payload, callBack }, { call, put }) {
       const response = yield call(delJobsList, payload);
+      if (response) {
+        callBack(response);
+      }
+    },
+
+    //新增招聘
+    *addJob({ payload, callBack }, { call }) {
+      const response = yield call(addJobsList, payload);
       if (response) {
         callBack(response);
       }

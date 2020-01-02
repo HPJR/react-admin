@@ -89,6 +89,14 @@ export default [
                 path: '/jobs/list',
                 component: './Jobs/Joblist',
               },
+              // 新增招聘
+              {
+                name: '新增招聘',
+                icon: 'highlight',
+                path: '/jobs/add',
+                component: './Jobs/Add',
+                hideInMenu: true,
+              },
               // 简历列表
               {
                 name: '简历列表',
