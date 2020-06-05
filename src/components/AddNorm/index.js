@@ -36,6 +36,7 @@ class InputArray extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const { names } = values;
+        // debugger;
         const { onChange } = this.props;
         if (onChange) {
           onChange({
