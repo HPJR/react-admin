@@ -9,66 +9,72 @@ let id = 0;
 class InputArray extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      keys: [],
+    };
   }
 
   add = () => {
-    const { form } = this.props;
-    const keys = form.getFieldValue('keys');
-    const nextKeys = keys.concat(id++);
-    form.setFieldsValue({
-      keys: nextKeys,
+    let { keys } = this.state;
+    keys.push({
+      names: '',
+      number: '',
+    });
+    this.setState({
+      keys,
     });
   };
 
   remove = k => {
-    const { form } = this.props;
-    const keys = form.getFieldValue('keys');
-    console.log(keys);
+    let { keys } = this.state;
+    const that = this;
+    const { onChange } = this.props;
     if (keys.length === 1) {
       return;
     }
-    form.setFieldsValue({
-      keys: keys.filter(key => key !== k),
-    });
-  };
-
-  handleChange = () => {
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        const { names } = values;
-        // debugger;
-        const { onChange } = this.props;
+    this.setState(
+      {
+        keys: keys.filter(key => key !== k),
+      },
+      () => {
         if (onChange) {
           onChange({
-            ...names,
+            ...that.state.keys,
           });
         }
-      }
-    });
+      },
+    );
+  };
+
+  handleChange = (val, index) => {
+    let { keys } = this.state;
+    const { onChange } = this.props;
+    keys[index] = val;
+    if (onChange) {
+      onChange({
+        ...keys,
+      });
+    }
   };
 
   render() {
-    // console.log(this.props.value);
-    const { getFieldDecorator, getFieldValue } = this.props.form;
-    getFieldDecorator('keys', { initialValue: this.props.value ? this.props.value : [] });
-    const keys = getFieldValue('keys');
-
-    const formItems = keys.map((k, index) => (
-      <div>
-        <Form.Item required={false} key={k}>
-          {getFieldDecorator(`names[${k}]`, {
-            validateTrigger: ['onChange', 'onBlur'],
-          })(
-            <InputTwo onChange={this.handleChange} key={index} values={this.props.value[index]} />,
-          )}
-          {keys.length > 1 ? (
-            <Icon
-              className="dynamic-delete-button"
-              type="minus-circle-o"
-              onClick={() => this.remove(k)}
-            />
-          ) : null}
-        </Form.Item>
+    let { keys } = this.state;
+    const formItems = keys.map((val, index) => (
+      <div className={styles.InputTwoWrap}>
+        <InputTwo
+          onChange={value => {
+            this.handleChange(value, index);
+          }}
+          key={val}
+          values={this.props.value[index]}
+        />
+        {keys.length > 1 ? (
+          <Icon
+            className="dynamic-delete-button"
+            type="minus-circle-o"
+            onClick={() => this.remove(val)}
+          />
+        ) : null}
       </div>
     ));
 

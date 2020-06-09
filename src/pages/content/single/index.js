@@ -20,6 +20,7 @@ export default class Single extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props.match);
     this.props.form.validateFields();
   }
 

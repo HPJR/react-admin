@@ -50,7 +50,7 @@ class InputTwo extends Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.normInputWrap}>
         <Input
           placeholder="规格名称：例如尺寸，重量等"
           defaultValue={this.props.values ? this.props.values.name : ''}
