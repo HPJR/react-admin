@@ -167,7 +167,7 @@ export default class JobList extends Component {
               type="primary"
               icon="plus"
               onClick={() => {
-                router.push('/jobs/add');
+                router.push('/jobs/add/add');
               }}
             >
               添加招聘

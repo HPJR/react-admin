@@ -40,7 +40,9 @@ export default class Add extends Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    console.log(this.props.match.params);
+  }
 
   //保存
   addJobs = params => {
