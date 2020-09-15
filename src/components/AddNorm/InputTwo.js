@@ -52,13 +52,13 @@ class InputTwo extends Component {
     return (
       <div className={styles.normInputWrap}>
         <Input
-          placeholder="规格名称：例如尺寸，重量等"
+          placeholder="字段名称"
           defaultValue={this.props.values ? this.props.values.name : ''}
           onChange={this.handleNameChange}
           className={styles.normInput}
         />
         <Input
-          placeholder="规格值"
+          placeholder="字段值"
           defaultValue={this.props.values ? this.props.values.name : ''}
           onChange={this.handleNumberChange}
           className={styles.normInput}

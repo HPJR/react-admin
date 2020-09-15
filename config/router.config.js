@@ -93,7 +93,7 @@ export default [
               {
                 name: '新增招聘',
                 icon: 'highlight',
-                path: '/jobs/add/:type',
+                path: '/jobs/list/add',
                 component: './Jobs/Add',
                 hideInMenu: true,
               },

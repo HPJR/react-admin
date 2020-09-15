@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Card, Button, Alert, Icon, Table } from 'antd';
+import { Card, Button, Icon, Table, Modal, Form, Input } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import common from '@/pages/all.less';
-import router from 'umi/router';
+import styles from './index.less';
 
 import { connect } from 'dva';
-
+@Form.create()
 @connect(({ jobs, loading }) => ({
   jobs,
   loading: loading.models.jobs,
@@ -17,6 +17,7 @@ export default class JobList extends Component {
       selectedRowKeys: [],
       currentPage: 1,
       pageSize: 10,
+      modalVisible: false,
     };
   }
 
@@ -69,9 +70,11 @@ export default class JobList extends Component {
         id: [idArr],
       });
     }
-    //编辑
+    //查看
     else {
-      console.log(idArr);
+      this.setState({
+        modalVisible: true,
+      });
     }
   };
 
@@ -82,6 +85,7 @@ export default class JobList extends Component {
   render() {
     const { JobsList } = this.props.jobs;
     const { selectedRowKeys } = this.state;
+    const { getFieldDecorator } = this.props.form;
 
     const rowSelection = {
       selectedRowKeys,
@@ -161,7 +165,7 @@ export default class JobList extends Component {
     return (
       <PageHeaderWrapper>
         <Card>
-        <div className={common.editBtn}>
+          <div className={common.editBtn}>
             <Button
               className={common.reseachBtn}
               type=""
@@ -183,6 +187,39 @@ export default class JobList extends Component {
             pagination={pageData}
             columns={columns}
           />
+          <Modal
+            title="简历详情"
+            visible={this.state.modalVisible}
+            onOk={this.handleOk}
+            onCancel={() => {
+              this.setState({ modalVisible: false });
+            }}
+          >
+            <div className={styles.info_list}>
+              <ul>
+                <li>
+                  <span>姓名：</span>
+                  <small>测试</small>
+                </li>
+                <li>
+                  <span>电话：</span>
+                  <small>测试测试测试</small>
+                </li>
+                <li>
+                  <span>地址：</span>
+                  <small>测试测试测试</small>
+                </li>
+                <li>
+                  <span>电子邮箱：</span>
+                  <small>1749081640@qq.com</small>
+                </li>
+                <li>
+                  <span>在线简历：</span>
+                  <small></small>
+                </li>
+              </ul>
+            </div>
+          </Modal>
         </Card>
       </PageHeaderWrapper>
     );

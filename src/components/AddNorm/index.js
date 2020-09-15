@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Card, Button, Form, Icon } from 'antd';
+import { getguid } from '@/utils/utils';
 import InputTwo from './InputTwo';
 import styles from './index.less';
-
-let id = 0;
 
 @Form.create()
 class InputArray extends Component {
@@ -14,10 +13,13 @@ class InputArray extends Component {
     };
   }
 
+  // 新增规格
   add = () => {
+    let id = getguid();
     let { keys } = this.state;
     keys.push({
-      names: '',
+      id: id,
+      name: '',
       number: '',
     });
     this.setState({
@@ -25,16 +27,18 @@ class InputArray extends Component {
     });
   };
 
+  // 删除
   remove = k => {
     let { keys } = this.state;
     const that = this;
     const { onChange } = this.props;
-    if (keys.length === 1) {
-      return;
-    }
+    // if (keys.length === 1) {
+    //   return;
+    // }
+    console.log(keys.filter(item => item.id !== k.id));
     this.setState(
       {
-        keys: keys.filter(key => key !== k),
+        keys: keys.filter(item => item.id !== k.id),
       },
       () => {
         if (onChange) {
@@ -46,33 +50,34 @@ class InputArray extends Component {
     );
   };
 
+  // 传值给props
   handleChange = (val, index) => {
     let { keys } = this.state;
     const { onChange } = this.props;
-    keys[index] = val;
+    keys[index]['name'] = val.name;
+    keys[index]['number'] = val.number;
     if (onChange) {
       onChange({
-        ...keys,
+        keys,
       });
     }
   };
 
   render() {
     let { keys } = this.state;
-    const formItems = keys.map((val, index) => (
-      <div className={styles.InputTwoWrap}>
+    const formItems = keys.map((item, index) => (
+      <div key={item.id} className={styles.InputTwoWrap}>
         <InputTwo
           onChange={value => {
             this.handleChange(value, index);
           }}
-          key={val}
           values={this.props.value[index]}
         />
-        {keys.length > 1 ? (
+        {keys.length >= 1 ? (
           <Icon
             className="dynamic-delete-button"
             type="minus-circle-o"
-            onClick={() => this.remove(val)}
+            onClick={() => this.remove(item)}
           />
         ) : null}
       </div>
@@ -85,7 +90,7 @@ class InputArray extends Component {
           <Form.Item>
             <Button type="primary" onClick={this.add} className={styles.addNormBtn}>
               <Icon type="plus" />
-              新增规格
+              新增字段
             </Button>
           </Form.Item>
         </div>

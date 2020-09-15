@@ -80,6 +80,7 @@ export default class Add extends Component {
     this.props.form.validateFields((err, values) => {
       values.content = content;
       values.time = moment(values.time).format('YYYY/MM/DD HH:mm:ss');
+      console.log(values);
       if (!err) {
         this.addJobs(values);
       }
@@ -146,6 +147,11 @@ export default class Add extends Component {
                   rules: [{ required: true, message: '请填写工资待遇' }],
                   initialValue: '',
                 })(<Input placeholder="工资待遇" />)}
+              </Form.Item>
+              <Form.Item label="其他要求" style={{ textIndent: 10 }}>
+                {getFieldDecorator('norm', {
+                  initialValue: [],
+                })(<InputArray />)}
               </Form.Item>
               <div className={styles.UEditorFormWrap}>
                 <div className={styles.UEditorTitle}>职位信息:</div>

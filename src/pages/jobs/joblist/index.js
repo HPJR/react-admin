@@ -72,6 +72,7 @@ export default class JobList extends Component {
     //编辑
     else {
       console.log(idArr);
+      router.push(`/jobs/list/add?id=${idArr}`);
     }
   };
 
@@ -167,7 +168,7 @@ export default class JobList extends Component {
               type="primary"
               icon="plus"
               onClick={() => {
-                router.push('/jobs/add/add');
+                router.push('/jobs/list/add');
               }}
             >
               添加招聘
@@ -191,7 +192,6 @@ export default class JobList extends Component {
             dataSource={JobsList.data}
             size="small"
             pagination={pageData}
-            columns={columns}
           />
           ;
         </Card>

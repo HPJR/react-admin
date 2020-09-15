@@ -12,9 +12,9 @@ import {
   Input,
 } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import InputArray from '../../../components/AddNorm';
+import InputArray from '@/components/AddNorm';
 import moment from 'moment';
-import Ueditor from '../../../components/UEditor';
+import Ueditor from '@/components/UEditor';
 import styles from './index.less';
 
 const { TextArea } = Input;
